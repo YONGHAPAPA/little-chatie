@@ -18,11 +18,8 @@ export default class Api{
     
     sendMessage(msg, cb){
         //console.log("sendMessage - api.js");
-
-        console.log('socket id > ' + socket.id);
+        //console.log('socket id > ' + socket.id);
         socket.emit('chatMsg', msg);
-
-        
 
         /*
         socket.on('chatMsg', function(msg){
@@ -32,9 +29,9 @@ export default class Api{
     }
 
     connectChatRoom(cb){
-        socket.on('chatMsg', function(msg){
+        socket.on('chatMsg', function(receivedData){
             //console.log("connectChatRoom > socket id" + socket.id);
-            cb(msg);
+            cb(receivedData);
         })
     }
 }

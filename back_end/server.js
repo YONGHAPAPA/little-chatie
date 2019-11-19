@@ -14,23 +14,22 @@ io.on('connection', (socket) => {
 
     //subscribeNotice
     socket.on('subscribeNotice', (userName) => {
-      let welcomeNotice = `Hi ${userName} Have a nice day~.`
+      let welcomeNotice = `Hi ${userName} Have a nice day~.`    
       io.emit('notice', welcomeNotice);
     })
     */
-
-
     //socket.emit('chatMsg', 'hi everyone.');
-
-    /*
+    
     socket.on('chatMsg', function(msg){
-      io.emit('chatMsg', msg);
+      //io.emit('chatMsg', msg);
       //socket.broadcast.emit(msg);
+      io.sockets.emit('chatMsg', msg);
     });
-    */
+    
 
     socket.emit('chatMsg', 'hi welcome.');
-    socket.broadcast.emit('chatMsg',{description:'client disconnect!!!!!!!!!!'});
+    //socket.broadcast.emit('chatMsg',{description:'client disconnect!!!!!!!!!!'});
+    
     socket.on('disconnect', function(){
       //io.socket.emit('chatMsg', {description: 'clients disconnected'})
     console.log('disconnected....');

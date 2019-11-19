@@ -7,10 +7,13 @@ import { thisTypeAnnotation } from '@babel/types';
 export default class ChatRoom extends Component {
     constructor(props){
         super(props);
-        this.onChangeMessageContent = this.onChangeMessageContent.bind(this);
+        this.onChangeSentMessage = this.onChangeSentMessage.bind(this);
         this.onSendMessage = this.onSendMessage.bind(this);
+        //this.listenningMessage = this.listenningMessage.bind(this);
+        this.handleReceivedMessage = this.handleReceivedMessage.bind(this);
         this.state = {
-            messageContent : '',
+            sentMsg : '',
+            msglist : [''],
         };
     }
 
@@ -18,35 +21,48 @@ export default class ChatRoom extends Component {
         this.connectChatRoom();
     }
 
-    connectChatRoom(){
-        const api = new Api();
-        api.connectChatRoom(function(rcvData){
-            console.log("connectChatRoom rcvMsg : " + rcvData.description);
-        })
+    handleReceivedMessage(receivedData){
+        const msglist = this.state.msglist;
+        const newMsgList = [...msglist, receivedData];
+        
+        this.setState({
+            msglist : newMsgList,
+        });
+
+        console.log(this.state.msglist);
     }
 
-    onChangeMessageContent(e){
+    connectChatRoom(){
+        const api = new Api();
+        api.connectChatRoom(this.handleReceivedMessage)
+    }
+
+    onChangeSentMessage(e){
         this.setState({
-            messageContent : e.target.value
+            sentMsg : e.target.value
         });
     }
 
     onSendMessage(e){
         e.preventDefault();
         const api = new Api();
-        console.log("send Message > " + this.state.messageContent);
-        api.sendMessage(this.state.messageContent, function(rcvMsg){
-            console.log("onSendMessage rcvMsg : " + rcvMsg);
+        console.log("send Message > " + this.state.sentMsg);
+        api.sendMessage(this.state.sentMsg, function(rcvData){
+            //console.log("onSendMessage rcvMsg : " + rcvMsg);
+            this.appendMessage(rcvData);
         });
 
         //console.log("message > " + this.state.messageContent);
         this.setState({
-            messageContent : '',
+            sentMsg : '',
         })
         return false;
     }
 
     render(){
+
+        const messageList = this.state.msglist;
+
         return(
             <div>
                 <p>######### ChatRoom #########</p>
@@ -56,10 +72,16 @@ export default class ChatRoom extends Component {
                             <RoomNoti connectTime={this.props.connectTime}/>
                         </div>
                         <div className="form-group">
-                            <ul id="messages"></ul>
+                            <ul>{
+                                messageList.map(function(item, i)
+                                {
+                                    return <li key={i}>{item}</li>
+                                })
+                                }</ul>
+                            
                         </div>
                         <div className="form-group" style={{display:'inline'}}>
-                            <input style={{width:"250px"}} className="form-control" type="text" value={this.state.messageContent} onChange={this.onChangeMessageContent}/><button onClick={this.onSendMessage}>Send</button>
+                            <input style={{width:"250px"}} className="form-control" type="text" value={this.state.sentMsg} onChange={this.onChangeSentMessage}/><button onClick={this.onSendMessage}>Send</button>
                         </div>
                     </div>
                 </form>
