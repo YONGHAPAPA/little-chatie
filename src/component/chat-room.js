@@ -13,7 +13,7 @@ export default class ChatRoom extends Component {
         this.handleReceivedMessage = this.handleReceivedMessage.bind(this);
         this.state = {
             sentMsg : '',
-            msglist : [''],
+            msglist : [],
         };
     }
 

@@ -2,6 +2,20 @@ var app = require('express')();
 var http = require('http').Server(app);
 const io = require('socket.io')(http);
 
+
+//set new namespace (s)
+const nsp = io.of("myNamespace");
+
+nsp.on('connection', function(socket){
+  socket.on('chatMsg', function(msg){
+    nsp.emit('chatMsg', msg);
+  })
+})
+//set new namespace (e)
+
+
+
+var roomNo = 1;
 io.on('connection', (socket) => {
 
     /*
@@ -18,23 +32,29 @@ io.on('connection', (socket) => {
       io.emit('notice', welcomeNotice);
     })
     */
-    //socket.emit('chatMsg', 'hi everyone.');
+    
+    //socket.emit('chatMsg', 'Hi Welcome.  Little-Chat Room.');
+    if(io.nsps['/'].adapter.rooms["room_" + roomNo] && io.nsps['/'].adapter.rooms["room_" + roomNo].length > 1) roomNo++;
+
+    console.log("room No. : " + roomNo);
+    socket.join("room_" + roomNo);
+    //io.sockets.in("room_" + roomNo).emit('chatMsg', "You are in room no : " + roomNo);
+    io.in("room_" + roomNo).emit('chatMsg', "you are in room no : " + roomNo);
+    
     
     socket.on('chatMsg', function(msg){
-      //io.emit('chatMsg', msg);
-      //socket.broadcast.emit(msg);
-      io.sockets.emit('chatMsg', msg);
+      io.sockets.emit('chatMsg', msg); // send event to all the clients.
+      socket.broadcast.emit('chatMsg', msg); // send event to all the clients except the client that caused it.
+      
+      //io.in("room_" + roomNo).emit('chatMsg', msg);
     });
-    
-
-    socket.emit('chatMsg', 'hi welcome.');
-    //socket.broadcast.emit('chatMsg',{description:'client disconnect!!!!!!!!!!'});
-    
+   
     socket.on('disconnect', function(){
-      //io.socket.emit('chatMsg', {description: 'clients disconnected'})
-    console.log('disconnected....');
+      let notiMsg = `client ${socket.id} is disconnected....`;
+      //socket.broadcast.emit('chatMsg', notiMsg);
+      socket.leave("room_" + roomNo);
+      console.log(notiMsg);
   })
-
 });
 
 const port = 8000;

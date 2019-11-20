@@ -1,5 +1,9 @@
 import openSocket from 'socket.io-client'
-const socket = openSocket('http://localhost:8000');
+//const socket = openSocket('http://localhost:8000/myNamespace');
+const socket = openSocket('http://localhost:8000/');
+//const socket = openSocket();
+
+
 
 export default class Api{
     constructor(){}
@@ -17,26 +21,14 @@ export default class Api{
     }
     
     sendMessage(msg, cb){
-        //console.log("sendMessage - api.js");
-        //console.log('socket id > ' + socket.id);
         socket.emit('chatMsg', msg);
-
-        /*
-        socket.on('chatMsg', function(msg){
-            cb(msg);
-        });
-        */
     }
 
     connectChatRoom(cb){
         socket.on('chatMsg', function(receivedData){
-            //console.log("connectChatRoom > socket id" + socket.id);
             cb(receivedData);
         })
     }
 }
-
-
-
 
 //export {subscribeToTimer, sendMessage};
