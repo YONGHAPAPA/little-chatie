@@ -20,13 +20,18 @@ export default class Api{
         })
     }
     
-    sendMessage(msg, cb){
-        socket.emit('chatMsg', msg);
+    sendMessage(req, cb){
+        socket.emit('send:message', req);
+        socket.on('send:message', function(res){
+            cb(res);
+        })
     }
 
-    connectChatRoom(cb){
-        socket.on('chatMsg', function(receivedData){
-            cb(receivedData);
+    connectChatRoom(req, cb){
+        console.log("connectChatRoom : " + req.room);
+        socket.emit('connect:room', req);        
+        socket.on('connect:room', function(res){
+            cb(res);
         })
     }
 }

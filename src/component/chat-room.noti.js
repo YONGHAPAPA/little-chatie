@@ -14,6 +14,11 @@ export default class RoomNoti extends Component {
         return(
             <div style={{display:'inline'}}>
                 <span>NOTICE : Your connect time is </span><span style={{fontWeight:'bold'}}>{this.props.connectTime}</span>
+                
+                {/* 
+                    <span>ROOM : </span><span style={{fontWeight:'bold'}}>{this.props.room}</span>
+                */}
+                
             </div>
         );
     }

@@ -21,27 +21,26 @@ class App extends Component {
       user_name : '',
       time_stamp : 'no timestamp yet.', 
       connect_time : new Date().getTime(),
+      selectedRoom : '',
     }
-    /*
-    const api = new Api();
-    api.subscribeToTimer((err, timestamp) => this.setState({
-      time_stamp : timestamp
-    }));
-    */
-
-    /*
-    api.subscribeNotice(this.state.user_name,(notiMsg) => this.setState({
-      room_noti : notiMsg
-    }));
-    */
-
-    //api.subscribeNotice("zerobreaker", (notice) => console.log(notice));
-
+    
     this.onChangeUserName = this.onChangeUserName.bind(this);
+    this.handleChangeRoom = this.handleChangeRoom.bind(this);
+   }
+
+   
+   handleChangeRoom(e){
+
+    //console.log(e.target.value);
+
+     this.setState({
+      selectedRoom : e.target.value
+     })
+
+     //console.log("handleChangeRoom : " + this.state.selectedRoom);
    }
 
    onChangeUserName(e){
-    console.log(e.target.value);
     this.setState({
       user_name : e.target.value
     });
@@ -53,7 +52,17 @@ class App extends Component {
           <div className="container">
             <p className="App-intro">
               {this.state.connect_time}
+              {this.state.selectedRoom}
             </p> 
+
+            <form>
+              <div className="radio">
+                <label><input type="radio" value="room_1" checked={this.state.selectedRoom === 'room_1'} onChange={this.handleChangeRoom} />Room 1 </label>&nbsp;
+                <label><input type="radio" value="room_2" checked={this.state.selectedRoom === 'room_2'} onChange={this.handleChangeRoom} />Room 2 </label>&nbsp;
+                <label><input type="radio" value="room_3" checked={this.state.selectedRoom === 'room_3'} onChange={this.handleChangeRoom} />Room 3 </label>&nbsp;
+                <label><input type="radio" value="room_4" checked={this.state.selectedRoom === 'room_4'} onChange={this.handleChangeRoom} />Room 4 </label>&nbsp;
+              </div>
+            </form>
 
             {
               /*
@@ -70,10 +79,16 @@ class App extends Component {
               <Route path="/" component={Chatroom}/>
             */}
 
-            <Route 
+            
+            <Chatroom connectTime={this.state.connect_time} room={this.state.selectedRoom} />
+
+            {/* 
+              <Route 
               path="/" 
-              render={(props) => <Chatroom {...props} connectTime={this.state.connect_time} />}
-            />
+              render={(props) => <Chatroom {...props} connectTime={this.state.connect_time} room={this.state.selectedRoom} />}
+              />
+            */}
+            
           </div>
         </Router>
       );
