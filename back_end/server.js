@@ -43,13 +43,14 @@ io.on('connection', (socket) => {
     socket.on('connect:room', function(req){
       const room = req.room;
       socket.join(room);
-      io.in(room).emit('connect:room', {message:`You are in the ${room}`});
+      //io.in(room).emit('connect:room', {message:`You are in the ${room}`});
+      socket.emit('connect:room', {type:'notice', message:`You are in the ${room}` })
     })
 
     socket.on('send:message', function(req){
       const room = req.room;
       const message = req.message;
-      io.sockets.in(room).emit('send:message', {message:message});
+      io.sockets.in(room).emit('send:message', {type:'chatmsg', message:message});
     })
 
     //socket.emit('chatMsg', 'Hi Welcome.  Little-Chat Room.');

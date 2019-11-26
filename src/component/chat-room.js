@@ -10,12 +10,14 @@ export default class ChatRoom extends Component {
         this.onChangeInputMessage = this.onChangeInputMessage.bind(this);
         this.onSendMessage = this.onSendMessage.bind(this);
         //this.listenningMessage = this.listenningMessage.bind(this);
-        this.handleReceivedMessage = this.handleReceivedMessage.bind(this);
+        this.handleResponse = this.handleResponse.bind(this);
+        this.afterConnectedRoom = this.afterConnectedRoom.bind(this);
 
         this.state = {
             room : props.room,
             msglist : [],
-            message : ''
+            message : '', 
+            room_notice : ''
         };
     }
 
@@ -38,9 +40,7 @@ export default class ChatRoom extends Component {
     */
 
     componentDidUpdate(prevProps, prevState){
-        //console.log("componentDidUpdate : " + this.props.room);
-        //console.log("componentDidUpdate : " + this.state.room);
-        //체크로직이 없으면 message textbox 가 입력될때마다 페이지가 초기화 되서 textbox 값이 공백이 됨.
+        //주의:체크로직이 없으면 message textbox 가 입력될때마다 페이지가 초기화 되서 textbox 값이 공백이 됨.
         if(prevProps.room !== this.props.room){
             this.connectChatRoom();
         }
@@ -51,20 +51,31 @@ export default class ChatRoom extends Component {
     }
 
 
-    handleReceivedMessage(res){
-        const message = res.message;
-        const newMsgList = [...this.state.msglist, message];
-        
-        this.setState({
-            msglist : newMsgList,
-        });
+    handleResponse(res){
+        switch(res.type){
+            case "notice" : 
+                this.setState({
+                    room_notice : res.message
+                })
+            break;
+            case "chatmsg" : 
+                const message = res.message;
+                const newMsgList = [...this.state.msglist, message];
+                
+                this.setState({
+                    msglist : newMsgList,
+                });
+            break;
+        }
+    }
+
+    afterConnectedRoom(res){
+        //console.log("afterconected : " + res.message);
     }
 
     connectChatRoom(){
         const api = new Api();
-        api.connectChatRoom({room:this.state.room}, function(res){
-            console.log("connectChatRoom res : " + res.message)
-        })
+        api.connectChatRoom({room:this.state.room}, this.handleResponse)
     }
 
     onChangeInputMessage(e){ 
@@ -80,7 +91,7 @@ export default class ChatRoom extends Component {
         const api = new Api();
 
         console.log("onSendMessage > " + this.state.message);
-        api.sendMessage({room:this.state.room, message:this.state.message}, this.handleReceivedMessage);
+        api.sendMessage({room:this.state.room, message:this.state.message}, this.handleResponse);
 
         this.setState({
             message : ''
@@ -97,7 +108,7 @@ export default class ChatRoom extends Component {
                 <form>
                     <div className="container">
                         <div className="form-group">
-                            <RoomNoti connectTime={this.props.connectTime} />
+                            <RoomNoti connectTime={this.props.connectTime} message={this.state.room_notice} />
                         </div>
                         <div className="form-group">
                             <ul>{

@@ -4,7 +4,6 @@ const socket = openSocket('http://localhost:8000/');
 //const socket = openSocket();
 
 
-
 export default class Api{
     constructor(){}
 
@@ -22,15 +21,16 @@ export default class Api{
     
     sendMessage(req, cb){
         socket.emit('send:message', req);
-        socket.on('send:message', function(res){
-            cb(res);
-        })
     }
 
     connectChatRoom(req, cb){
-        console.log("connectChatRoom : " + req.room);
+        //console.log("connectChatRoom : " + req.room);
         socket.emit('connect:room', req);        
         socket.on('connect:room', function(res){
+            cb(res);
+        })
+
+        socket.on('send:message', function(res){
             cb(res);
         })
     }
