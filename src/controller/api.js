@@ -24,7 +24,6 @@ export default class Api{
     }
 
     connectChatRoom(req, cb){
-        //console.log("connectChatRoom : " + req.room);
         socket.emit('connect:room', req);        
         socket.on('connect:room', function(res){
             cb(res);

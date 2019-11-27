@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Api from '../api';
+import Api from '../../controller/api';
 import RoomNoti from './chat-room.noti';
 import { thisTypeAnnotation } from '@babel/types';
 

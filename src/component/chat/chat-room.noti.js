@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Api from '../api';
+import Api from '../../controller/api';
 
 const noti_connectTime = null;
 
