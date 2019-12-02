@@ -15,6 +15,7 @@ import Popup from './component/comm/comm-popup';
 import Modal from './component/main/main-modal';
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./index.css";
 
 
 class App extends Component {
@@ -28,7 +29,8 @@ class App extends Component {
       connect_time : new Date().getTime(),
       selectedRoom : '',
       showPopup : false, 
-      showModal : false
+      showModal : false, 
+      user_mailAddress : ''
     }
     
     this.onChangeUserName = this.onChangeUserName.bind(this);
@@ -41,25 +43,26 @@ class App extends Component {
      });
    }
 
-
    toggleModal(){
     this.setState({
        showModal : !this.state.showModal
      });
    }
 
-   
    handleChangeRoom(e){
      this.setState({
       selectedRoom : e.target.value
      })
    }
 
-
    onChangeUserName(e){
     this.setState({
       user_name : e.target.value
     });
+   }
+
+   processLogin(userInfo){
+     console.log(userInfo);
    }
 
    
@@ -112,11 +115,11 @@ class App extends Component {
               />
             */}
 
-            <div className="">
+            <div className="menu_main_top_right">
               <span onClick={this.toggleModal.bind(this)}>Login</span>
               {this.state.showPopup ? <Popup closePopup={this.togglePopup.bind(this)}/> : null}
             </div>
-            <Modal show={this.state.showModal}><Login closeLogin={this.toggleModal.bind(this)}/></Modal>
+            <Modal show={this.state.showModal}><Login processLogin={this.processLogin.bind(this)} closeLogin={this.toggleModal.bind(this)}/></Modal>
           </div>
         </Router>
       );

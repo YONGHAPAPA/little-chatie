@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.menu_main_top_right {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "calibri",
+    monospace;
+  float:right;
+  padding-right:5px;
+  position:relative;
+  cursor: pointer;
+}
