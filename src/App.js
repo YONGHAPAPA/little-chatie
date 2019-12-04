@@ -71,21 +71,25 @@ class App extends Component {
         <Router>
           <div className="container">
 
-            {/*
-              <p className="App-intro">
-              {this.state.connect_time}
-              {this.state.selectedRoom}
-              </p> 
 
-              <form>
-                <div className="radio">
-                  <label><input type="radio" value="room_1" checked={this.state.selectedRoom === 'room_1'} onChange={this.handleChangeRoom} />Room 1 </label>&nbsp;
-                  <label><input type="radio" value="room_2" checked={this.state.selectedRoom === 'room_2'} onChange={this.handleChangeRoom} />Room 2 </label>&nbsp;
-                  <label><input type="radio" value="room_3" checked={this.state.selectedRoom === 'room_3'} onChange={this.handleChangeRoom} />Room 3 </label>&nbsp;
-                  <label><input type="radio" value="room_4" checked={this.state.selectedRoom === 'room_4'} onChange={this.handleChangeRoom} />Room 4 </label>&nbsp;
-                </div>
-              </form>
-            */}
+          
+          <p className="App-intro">
+            {this.state.connect_time}
+            {this.state.selectedRoom}
+            </p> 
+
+            <form>
+              <div className="radio">
+                <label><input type="radio" value="room_1" checked={this.state.selectedRoom === 'room_1'} onChange={this.handleChangeRoom} />Room 1 </label>&nbsp;
+                <label><input type="radio" value="room_2" checked={this.state.selectedRoom === 'room_2'} onChange={this.handleChangeRoom} />Room 2 </label>&nbsp;
+                <label><input type="radio" value="room_3" checked={this.state.selectedRoom === 'room_3'} onChange={this.handleChangeRoom} />Room 3 </label>&nbsp;
+                <label><input type="radio" value="room_4" checked={this.state.selectedRoom === 'room_4'} onChange={this.handleChangeRoom} />Room 4 </label>&nbsp;
+              </div>
+            </form>
+          
+            
+              
+            
             
 
             {
@@ -107,13 +111,12 @@ class App extends Component {
               <Chatroom connectTime={this.state.connect_time} room={this.state.selectedRoom} />
             */}
             
-
-            {/* 
-              <Route 
-              path="/" 
-              render={(props) => <Chatroom {...props} connectTime={this.state.connect_time} room={this.state.selectedRoom} />}
-              />
-            */}
+            
+            <Route 
+            path="/" 
+            render={(props) => <Chatroom {...props} connectTime={this.state.connect_time} room={this.state.selectedRoom} />}
+            />
+            
 
             <div className="menu_main_top_right">
               <span onClick={this.toggleModal.bind(this)}>Login</span>

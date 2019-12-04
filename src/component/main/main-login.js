@@ -1,10 +1,5 @@
 import React, {Component} from 'react';
-import DataAccess from '../../controller/data-access'
 import '../../style.css'
-
-
-
-
 
 export default class Login extends Component {
 
@@ -22,14 +17,9 @@ export default class Login extends Component {
 
    doLogin = () => {
         //여기서 submit 하고 사용자 정보 Parent로 리턴처리로..
-        var da = new DataAccess();
-        da.openDbConnection();
-
-        
-        
-        this.props.processLogin("complete login...");
+        //this.props.processLogin("complete login...");
+        console.log("toLogin...");
     }
-
 
 
     render(){

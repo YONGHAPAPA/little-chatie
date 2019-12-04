@@ -1,7 +1,23 @@
+var express = require('express');
 var app = require('express')();
 var http = require('http').Server(app);
 const io = require('socket.io')(http);
+const cors = require('cors');
+var bodyParser = require('body-parser');
+const Routes = express.Router();
 
+var userRouter = require('./routes/users');
+
+app.use(cors());
+app.use(bodyParser.json());
+
+const dbUri = "mongodb+srv://mongoman01:mongoman01@cluster0-jcbtw.mongodb.net/little_chatie?retryWrites=true&w=majority";
+const DBAccess = require('./component/dao/dbaccess');
+var User = require('./component/dao/user');
+var dbo = null;
+var database = null;
+
+app.use('/user', userRouter);
 
 
 //set new namespace (s)
@@ -25,6 +41,7 @@ const responseData = {
 var roomNo = 1;
 io.on('connection', (socket) => {
 
+    //console.log("io connection...");
     /*
     socket.on('subscribeToTimer', (interval) => {
       console.log('client is subscribing to timer with interval ', interval);
@@ -41,8 +58,54 @@ io.on('connection', (socket) => {
     */
 
     socket.on('connect:room', function(req){
+
+      console.log("connection room.");
+
       const room = req.room;
       socket.join(room);
+
+      //console.log('connection');
+      //da = new DAO();
+      //dbo = da.openDBConnect();
+
+
+      /*
+      var promise = da.openDBConnect();
+      promise.then(da.getUserInfo('zero@gmail.com', dbo).then((result) => {
+        if(result){
+          console.log("getUserInfo");
+          console.log(result);
+        }
+      }));
+      */
+
+      /*
+      da.getUserInfo('zero@gmail.com', dbo).then((result) => {
+        if(result){
+          console.log("getUserInfo");
+          console.log(result);
+        }
+      });
+      */
+
+     //database 
+     /*
+     var dbo = new DBAccess();
+     dbo.openDBConnect(dbUri).then((db) => {
+       this.database = db;
+       console.log(this.database);
+     })
+     */
+
+     /*
+     User = new User();
+     User.getAllUsersInfo().then((result) => {
+       if(result){
+         console.log(result);
+       }
+     });
+     */
+
       //io.in(room).emit('connect:room', {message:`You are in the ${room}`});
       socket.emit('connect:room', {type:'notice', message:`You are in the ${room}` })
     })
@@ -50,35 +113,19 @@ io.on('connection', (socket) => {
     socket.on('send:message', function(req){
       const room = req.room;
       const message = req.message;
+
+      /*
+      da.getUserInfo('zero@gmail.com', dbo).then((result) => {
+        if(result){
+          console.log("getUserInfo");
+          console.log(result);
+        }
+      });
+      */
+
+
       io.sockets.in(room).emit('send:message', {type:'chatmsg', message:message});
     })
-
-    //socket.emit('chatMsg', 'Hi Welcome.  Little-Chat Room.');
-    //if(io.nsps['/'].adapter.rooms["room_" + roomNo] && io.nsps['/'].adapter.rooms["room_" + roomNo].length > 1) roomNo++;
-    //console.log("join to room No. : " + roomNo);
-    //socket.join("room_" + roomNo);
-    //responseData.room = "room_" + roomNo;
-    //responseData.type = "info";
-    //responseData.message = "you are in room no : " + roomNo;
-    //io.in("room_" + roomNo).emit('chatMsg', responseData);
-
-    /*
-    socket.on('chatMsg', function(msg){
-      //io.sockets.emit('chatMsg', msg); // send event to all the clients.
-      //socket.broadcast.emit('chatMsg', msg); // send event to all the clients except the client that caused it.
-      //io.in("room_" + roomNo).emit('chatMsg', msg);
-      //io.sockets.in("room_" + roomNo).emit('chatMsg', "You are in room no : " + roomNo);
-      //io.in("room_" + roomNo).emit('chatMsg', "you are in room no : " + roomNo);
-
-      console.log("send to room_" + roomNo);
-      console.log(msg);
-      responseData.room = "room_" + roomNo;
-      responseData.type = "msg";
-      responseData.message = `[room no.${roomNo}]${msg}`;
-      io.in("room_" + roomNo).emit('chatMsg', responseData);
-    });
-    */
-   
 
     socket.on('disconnect', function(){
       let notiMsg = `client ${socket.id} is disconnected....`;
@@ -89,5 +136,7 @@ io.on('connection', (socket) => {
 });
 
 const port = 8000;
-io.listen(port);
+//io.listen(port);
+http.listen(port);
+
 console.log('listening on port ', port);
