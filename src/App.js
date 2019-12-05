@@ -5,14 +5,16 @@ import './App.css';
 
 //import {subscribeToTimer} from './api';
 import Api from './controller/api';
+import axios from 'axios';
 
 
 import { tsConstructorType } from '@babel/types';
 
 import Chatroom from './component/chat/chat-room';
-import Login from './component/main/main-login';
+import PopupLogin from './component/main/popup-signin';
 import Popup from './component/comm/comm-popup';
 import Modal from './component/main/main-modal';
+import Siginin from './component/main/signin'
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
@@ -30,7 +32,8 @@ class App extends Component {
       selectedRoom : '',
       showPopup : false, 
       showModal : false, 
-      user_mailAddress : ''
+      user_mailAddress : '', 
+      inputUserEmail : '',
     }
     
     this.onChangeUserName = this.onChangeUserName.bind(this);
@@ -61,8 +64,11 @@ class App extends Component {
     });
    }
 
-   processLogin(userInfo){
-     console.log(userInfo);
+   processLogin(userInputEmail){
+     let reqData = {useremail : userInputEmail};
+     axios.get('http://localhost:8000/user').then(res => {
+        //console.log("request result : " + res.data.result);
+      }).catch(err => {console.log(err)});
    }
 
    
@@ -70,8 +76,6 @@ class App extends Component {
       return (
         <Router>
           <div className="container">
-
-
           
           <p className="App-intro">
             {this.state.connect_time}
@@ -119,11 +123,22 @@ class App extends Component {
             
 
             <div className="menu_main_top_right">
-              <span onClick={this.toggleModal.bind(this)}>Login</span>
-              {this.state.showPopup ? <Popup closePopup={this.togglePopup.bind(this)}/> : null}
+              <Link to="/signin">sign in</Link>&nbsp;
+              <Link to="/signup">sign up</Link>
+              
+              {/*
+                <span onClick={this.toggleModal.bind(this)}>Login</span>
+                {this.state.showPopup ? <Popup closePopup={this.togglePopup.bind(this)}/> : null}
+              */}
             </div>
-            <Modal show={this.state.showModal}><Login processLogin={this.processLogin.bind(this)} closeLogin={this.toggleModal.bind(this)}/></Modal>
+
+            {/*
+              <Modal show={this.state.showModal}><PopupLogin inputUserEmail={this.state.inputUserEmail} processLogin={this.processLogin.bind(this)} closeLogin={this.toggleModal.bind(this)}/></Modal>
+            */}
+            
           </div>
+
+          <Route path="/signin" component={Siginin} />
         </Router>
       );
     }
