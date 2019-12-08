@@ -12,10 +12,10 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const dbUri = "mongodb+srv://mongoman01:mongoman01@cluster0-jcbtw.mongodb.net/little_chatie?retryWrites=true&w=majority";
-const DBAccess = require('./component/dao/dbaccess');
-var User = require('./component/dao/user');
-var dbo = null;
-var database = null;
+//const DBAccess = require('./lib/dao');
+//var User = require('./lib/user');
+//var dbo = null;
+//var database = null;
 
 app.use('/user', userRouter);
 

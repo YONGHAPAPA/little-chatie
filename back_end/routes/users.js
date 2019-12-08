@@ -1,12 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var user_controller = require('../controller/user_controller');
 
-router.get("/", (req, res)=>{
-    console.log("route to users....");
-    //res.send("OK");
-    var data = {result:'OK'}
-    res.send(data);
-
-})
+router.get("/regist", user_controller.register)
 
 module.exports = router;

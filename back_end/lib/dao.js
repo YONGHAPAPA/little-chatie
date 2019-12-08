@@ -1,15 +1,21 @@
 //import { setupMaster } from 'cluster';
 
-const MongoClient = require('mongodb').MongoClient;
-const mongoose = require('mongoose');
+const {MongoClient} = require('mongodb').MongoClient;
+
+
 const Q = require('q');
+//import Q from 'q';
+
 var assert = require('assert');
+//import assert from 'assert';
 const uri = "mongodb+srv://mongoman01:mongoman01@cluster0-jcbtw.mongodb.net/little_chatie?retryWrites=true&w=majority";
 const dbConnection = null;
+const connection = null;
 
 
 
-class DBAccess{
+
+class DAO{
     
     openDBConnect(uri){
 
@@ -23,17 +29,7 @@ class DBAccess{
             console.log("connecting to database...");
             MongoClient.connect(uri, option, (err, db) => {
                 assert.equal(null, err);
-
-                /*
-                if(err){
-                    console.log(err);
-                } else {
-                    this.dbConnection = db;
-                    console.log("connected successfully to database");
-                }
-                */
-
-               this.dbConnection = db;
+                this.dbConnection = db;
 
                 if(err){
                     deferred.reject(new Error(JSON.stringify(err)));
@@ -46,6 +42,32 @@ class DBAccess{
         return deferred.promise;
     }
 
+
+    openConnection(uri){
+        const deferred = Q.defer();
+
+        var option = {
+            useNewUrlParser : true,
+        }
+
+        if(this.connection == null){
+            MongoClient.connect(uri, option, (err, db) => {
+                if(err) {
+                    console.log(err);
+                    deferred.reject(new Error(JSON.stringify(err)));
+                } else {
+                    this.connetion = db;
+                    return deferred.resolve(this.connection);
+                }
+            })
+        } else {
+            return deferred.resolve(this.connection);
+        }
+
+        return deferred.promise;
+
+    }
+
     closeDBConnect(){
         if(this.dbConnection){
             this.dbConnection.close();
@@ -54,4 +76,4 @@ class DBAccess{
     }
 }
 
-module.exports = DBAccess;
+module.exports = DAO;

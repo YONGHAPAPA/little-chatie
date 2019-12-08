@@ -1,20 +1,24 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import { tsConstructorType } from '@babel/types';
+import axios from 'axios';
 import logo from './logo.svg';
 import './App.css';
 
+import mongodb from 'mongodb';
+
+
 //import {subscribeToTimer} from './api';
 import Api from './controller/api';
-import axios from 'axios';
+//import Com from './/lib/com';
 
-
-import { tsConstructorType } from '@babel/types';
 
 import Chatroom from './component/chat/chat-room';
 import PopupLogin from './component/main/popup-signin';
 import Popup from './component/comm/comm-popup';
 import Modal from './component/main/main-modal';
-import Siginin from './component/main/signin'
+import Signin from './component/main/signin';
+import Signup from './component/main/signup';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
@@ -34,6 +38,7 @@ class App extends Component {
       showModal : false, 
       user_mailAddress : '', 
       inputUserEmail : '',
+      userinfo : {}
     }
     
     this.onChangeUserName = this.onChangeUserName.bind(this);
@@ -56,6 +61,8 @@ class App extends Component {
      this.setState({
       selectedRoom : e.target.value
      })
+
+     console.log(this.state.user_name);
    }
 
    onChangeUserName(e){
@@ -65,11 +72,31 @@ class App extends Component {
    }
 
    processLogin(userInputEmail){
-     let reqData = {useremail : userInputEmail};
-     axios.get('http://localhost:8000/user').then(res => {
+    let reqData = {useremail : userInputEmail};
+    axios.get('http://localhost:8000/user/register').then(res => {
         //console.log("request result : " + res.data.result);
-      }).catch(err => {console.log(err)});
+    }).catch(err => {console.log(err)});
    }
+
+   getUserInfo = (userInfo) => {
+    console.log("getUserInfo : " + userInfo);
+   }
+
+   doRegister = (data) => {
+     console.log("doProcessRegister...");
+     
+    axios.get('http://localhost:8000/user/regist').then(res => {
+        console.log("register result : " + res.data.result);
+    }).catch(err => {console.log(err)});
+
+
+   }
+
+   /*
+   getUserInfo(userInfo){
+    console.log("getUserInfo : " + userInfo);
+   }
+   */
 
    
    render(){
@@ -89,10 +116,8 @@ class App extends Component {
                 <label><input type="radio" value="room_3" checked={this.state.selectedRoom === 'room_3'} onChange={this.handleChangeRoom} />Room 3 </label>&nbsp;
                 <label><input type="radio" value="room_4" checked={this.state.selectedRoom === 'room_4'} onChange={this.handleChangeRoom} />Room 4 </label>&nbsp;
               </div>
-            </form>
-          
-            
               
+            </form>
             
             
 
@@ -116,13 +141,11 @@ class App extends Component {
             */}
             
             
-            <Route 
-            path="/" 
-            render={(props) => <Chatroom {...props} connectTime={this.state.connect_time} room={this.state.selectedRoom} />}
-            />
+            
             
 
             <div className="menu_main_top_right">
+              <Link to="/">Home</Link>&nbsp;
               <Link to="/signin">sign in</Link>&nbsp;
               <Link to="/signup">sign up</Link>
               
@@ -135,10 +158,12 @@ class App extends Component {
             {/*
               <Modal show={this.state.showModal}><PopupLogin inputUserEmail={this.state.inputUserEmail} processLogin={this.processLogin.bind(this)} closeLogin={this.toggleModal.bind(this)}/></Modal>
             */}
-            
           </div>
 
-          <Route path="/signin" component={Siginin} />
+          
+          <Route path="/" render={(props) => <Chatroom {...props} connectTime={this.state.connect_time} room={this.state.selectedRoom} />}/>
+          <Route path="/signin" render={(props)=><Signin {...props} />} />
+          <Route path='/signup' render={(props)=><Signup {...props} doRegister={this.doRegister} />} />
         </Router>
       );
     }

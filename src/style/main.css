@@ -1,0 +1,34 @@
+.menu_main_top_right {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "calibri", monospace;
+    float:right;
+    padding-right:5px;
+    position:relative;
+    cursor: pointer;
+  }
+
+.main_login {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "calibri", monospace;
+}
+
+.center_block {
+    width:100%;
+    padding:70px;
+    text-align: center;
+}
+
+.in_block {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "calibri", monospace;
+    display:inline-block;
+    padding:50px;
+    width:50%;
+}
+
+table {
+    width : 100%;
+    border: 1px solid rgb(245, 183, 67)
+    
+}
+
+tfoot {
+    margin: 0;
+}
