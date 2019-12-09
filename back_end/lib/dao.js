@@ -1,6 +1,6 @@
 //import { setupMaster } from 'cluster';
 
-const {MongoClient} = require('mongodb').MongoClient;
+const MongoClient = require('mongodb').MongoClient;
 
 
 const Q = require('q');
@@ -8,7 +8,7 @@ const Q = require('q');
 
 var assert = require('assert');
 //import assert from 'assert';
-const uri = "mongodb+srv://mongoman01:mongoman01@cluster0-jcbtw.mongodb.net/little_chatie?retryWrites=true&w=majority";
+//const uri = "mongodb+srv://mongoman01:mongoman01@cluster0-jcbtw.mongodb.net/little_chatie?retryWrites=true&w=majority";
 const dbConnection = null;
 const connection = null;
 
@@ -16,6 +16,10 @@ const connection = null;
 
 
 class DAO{
+
+    test(uri){
+        console.log(uri);
+    }
     
     openDBConnect(uri){
 
@@ -57,11 +61,11 @@ class DAO{
                     deferred.reject(new Error(JSON.stringify(err)));
                 } else {
                     this.connetion = db;
-                    return deferred.resolve(this.connection);
+                    return deferred.resolve(db);
                 }
             })
         } else {
-            return deferred.resolve(this.connection);
+            return deferred.resolve(db);
         }
 
         return deferred.promise;

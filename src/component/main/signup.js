@@ -6,17 +6,41 @@ export default class Siginup extends Component {
 
     constructor(props){
         super(props);
+
+        this.state ={
+            username : '', 
+            email : '',
+            password : ''
+        }
     }
 
     
     onClickRegister = () => {
         let data = {
-            id : 'zerobreaker@gmail.com', 
-            email : 'zerobreaker@gmail.com',
-            pwd : '1234'
+            username : this.state.username, 
+            email : this.state.email,
+            password : this.state.password
         }
 
         this.props.doRegister(data);
+    }
+
+    onChangeUserName(e){
+        this.setState({
+            username : e.target.value,
+        });
+    }
+
+    onChangeEmail(e){
+        this.setState({
+            email : e.target.value,
+        })
+    }
+
+    onChangePassword(e){
+        this.setState({
+            password : e.target.value
+        });
     }
     
 
@@ -24,20 +48,17 @@ export default class Siginup extends Component {
         return(
             <div className='center_block'>
                 <div className='in_block'>
-                    <h1>Sign up</h1>
-                    <table>
+                    <h4>Sign up</h4>
+                    <table className='login_table'>
                         <tbody>
                             <tr>
-                                <td><label>email address</label></td>
+                                <td><label>username&nbsp;</label><input type='text' onChange={this.onChangeUserName.bind(this)}/></td>
                             </tr>
                             <tr>
-                                <td><input type='text'/></td>
+                                <td><label>email&nbsp;</label><input type='text' onChange={this.onChangeEmail.bind(this)}/></td>
                             </tr>
                             <tr>
-                                <td><label>password</label></td>
-                            </tr>
-                            <tr>
-                                <td><input type='text' /></td>
+                                <td><label>password&nbsp;</label><input type='password' onChange={this.onChangePassword.bind(this)}/></td>
                             </tr>
                         </tbody>
                         <tfoot>

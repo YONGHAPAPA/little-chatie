@@ -82,14 +82,10 @@ class App extends Component {
     console.log("getUserInfo : " + userInfo);
    }
 
-   doRegister = (data) => {
-     console.log("doProcessRegister...");
-     
-    axios.get('http://localhost:8000/user/regist').then(res => {
+   doRegister = (inputData) => {
+    axios.post('http://localhost:8000/user/register', inputData).then(res => {
         console.log("register result : " + res.data.result);
     }).catch(err => {console.log(err)});
-
-
    }
 
    /*
