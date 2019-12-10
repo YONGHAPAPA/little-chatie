@@ -12,7 +12,7 @@ class User {
     getAllUsersInfo(dataBase){
         const deferred = Q.defer();
         var dbo = database.db("little_chatie");;
-        var userCollection = dbo.collection('org_user').find();
+        var userCollection = dbo.collection('users').find();
 
         userCollection.each((err, documents) => {
             if(err){

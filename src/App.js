@@ -19,6 +19,8 @@ import Popup from './component/comm/comm-popup';
 import Modal from './component/main/main-modal';
 import Signin from './component/main/signin';
 import Signup from './component/main/signup';
+import Dashboard from './component/main/dashboard'
+import TopMain from './component/main/top-main'
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
@@ -38,6 +40,7 @@ class App extends Component {
       showModal : false, 
       user_mailAddress : '', 
       inputUserEmail : '',
+      isLogin : false,
       userinfo : {}
     }
     
@@ -85,8 +88,14 @@ class App extends Component {
    doRegister = (inputData) => {
     axios.post('http://localhost:8000/user/register', inputData).then(res => {
         console.log("register result : " + res.data.result);
+
+        if(res.data.result === "OK"){
+          
+        }
     }).catch(err => {console.log(err)});
    }
+
+
 
    /*
    getUserInfo(userInfo){
@@ -100,22 +109,21 @@ class App extends Component {
         <Router>
           <div className="container">
           
-          <p className="App-intro">
-            {this.state.connect_time}
-            {this.state.selectedRoom}
-            </p> 
+            {/*
+              <p className="App-intro">
+                {this.state.connect_time}
+                {this.state.selectedRoom}
+              </p> 
 
-            <form>
-              <div className="radio">
-                <label><input type="radio" value="room_1" checked={this.state.selectedRoom === 'room_1'} onChange={this.handleChangeRoom} />Room 1 </label>&nbsp;
-                <label><input type="radio" value="room_2" checked={this.state.selectedRoom === 'room_2'} onChange={this.handleChangeRoom} />Room 2 </label>&nbsp;
-                <label><input type="radio" value="room_3" checked={this.state.selectedRoom === 'room_3'} onChange={this.handleChangeRoom} />Room 3 </label>&nbsp;
-                <label><input type="radio" value="room_4" checked={this.state.selectedRoom === 'room_4'} onChange={this.handleChangeRoom} />Room 4 </label>&nbsp;
-              </div>
-              
-            </form>
-            
-            
+              <form>
+                <div className="radio">
+                  <label><input type="radio" value="room_1" checked={this.state.selectedRoom === 'room_1'} onChange={this.handleChangeRoom} />Room 1 </label>&nbsp;
+                  <label><input type="radio" value="room_2" checked={this.state.selectedRoom === 'room_2'} onChange={this.handleChangeRoom} />Room 2 </label>&nbsp;
+                  <label><input type="radio" value="room_3" checked={this.state.selectedRoom === 'room_3'} onChange={this.handleChangeRoom} />Room 3 </label>&nbsp;
+                  <label><input type="radio" value="room_4" checked={this.state.selectedRoom === 'room_4'} onChange={this.handleChangeRoom} />Room 4 </label>&nbsp;
+                </div>
+              </form>
+            */}
 
             {
               /*
@@ -135,13 +143,10 @@ class App extends Component {
             {/*
               <Chatroom connectTime={this.state.connect_time} room={this.state.selectedRoom} />
             */}
-            
-            
-            
-            
 
             <div className="menu_main_top_right">
-              <Link to="/">Home</Link>&nbsp;
+              <Link to="/">home</Link>&nbsp;
+              <Link to="/dashboard">dashboard</Link>&nbsp;
               <Link to="/signin">sign in</Link>&nbsp;
               <Link to="/signup">sign up</Link>
               
@@ -157,7 +162,10 @@ class App extends Component {
           </div>
 
           
-          <Route path="/" render={(props) => <Chatroom {...props} connectTime={this.state.connect_time} room={this.state.selectedRoom} />}/>
+          {/*<Route path="/" render={(props) => <Chatroom {...props} connectTime={this.state.connect_time} room={this.state.selectedRoom} />}/>*/}
+
+          <Route path="/" render={(props) => <TopMain {...props}/>} />
+          <Route path="/dashboard" render={(props) => <Dashboard {...props}/>} />
           <Route path="/signin" render={(props)=><Signin {...props} />} />
           <Route path='/signup' render={(props)=><Signup {...props} doRegister={this.doRegister} />} />
         </Router>
