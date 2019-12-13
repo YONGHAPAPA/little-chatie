@@ -45,13 +45,15 @@ export default class Signin extends Component {
         }
 
         axios.post(post_url, reqData).then(res => {
-
-            console.log(res.data);
-            
             let result = (res.data.result === "S") ? true : false;
+
             this.setState({
                 isLogin : result,
             });
+
+            if(!result){
+                alert("login fail.");
+            }
         }).catch(err => {console.log(err)})
     }
     

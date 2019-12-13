@@ -86,13 +86,7 @@ class App extends Component {
    }
 
    doRegister = (inputData) => {
-    axios.post('http://localhost:8000/user/register', inputData).then(res => {
-        console.log("register result : " + res.data.result);
-
-        if(res.data.result === "OK"){
-          
-        }
-    }).catch(err => {console.log(err)});
+    axios.post('http://localhost:8000/user/register', inputData).then().catch(err => {console.log(err)});
    }
 
 

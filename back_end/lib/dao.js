@@ -17,6 +17,7 @@ const connection = null;
 
 class DAO{
 
+    /*
     test(uri){
         console.log(uri);
     }
@@ -45,6 +46,7 @@ class DAO{
 
         return deferred.promise;
     }
+    */
 
 
     openConnection(uri){

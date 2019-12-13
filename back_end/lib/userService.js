@@ -9,25 +9,11 @@ class User {
         this.user = user;
     }
 
-    getAllUsersInfo(dataBase){
-        const deferred = Q.defer();
-        var dbo = database.db("little_chatie");;
-        var userCollection = dbo.collection('users').find();
+    
+    encryptPassword(password){
 
-        userCollection.each((err, documents) => {
-            if(err){
-                deferred.reject(new Error(JSON.stringify(err)));
-            } else {
-                return deferred.resolve(documents);
-            }
-        })
-
-        return deferred.promise;
     }
-
-    registerUser(){
-        
-    }
+   
 }
 
 module.exports = User;

@@ -1,10 +1,11 @@
+const security = require('../lib/security');
 const Users = require('../lib/userService');
 const DAO = require('../lib/dao');
 const db_uri = "mongodb+srv://mongoman01:mongoman01@cluster0-jcbtw.mongodb.net/little_chatie?retryWrites=true&w=majority";
 let db_conn = null;
 
 
-exports.register = function(req, res){
+exports.register = (req, res) => {
 
     const newUser = {
         username : '', 
@@ -15,7 +16,8 @@ exports.register = function(req, res){
     }
 
     var rtnData = {
-        result : ''
+        result : '', 
+        user : {}
     }
 
 
@@ -28,28 +30,34 @@ exports.register = function(req, res){
             newUser.email = value;
         }
         if(key === "password"){
-            newUser.password = value;
+            newUser.password = value;    
+            //newUser.password = security.encryptPassword(value, 10);
         }
     })
 
-    const dao = new DAO();
-    dao.openConnection(db_uri).then(conn => {
-        this.db_connection = conn;
-        let db = conn.db();
+    
+    security.encryptPassword(newUser.password, 10, (hash) => {
+        newUser.password = hash;
 
-        db.collection('users').insertOne(newUser, function(err, result){
-            if(err) throw err; 
+        const dao = new DAO();
+        dao.openConnection(db_uri).then(conn => {
+            this.db_connection = conn;
+            let db = conn.db();
 
-            if(result.insertedCount > 0){
-                rtnData.result = "OK"
-            } else {
-                rtnData.result = "ERROR";
-            }
+            db.collection('users').insertOne(newUser, function(err, result){
+                if(err) throw err; 
 
-            connection.close();
-            res.send(rtnData);
+                if(result.insertedCount > 0){
+                    rtnData.result = "S"
+                } else {
+                    rtnData.result = "F";
+                }
+
+                conn.close();
+                res.send(rtnData);
+            })
         })
-    })
+    });
 }
 
 exports.login = function(req, res){
@@ -78,14 +86,29 @@ exports.login = function(req, res){
         db.collection("users").findOne({
             $and:[
                 {email:inputData.email}, 
-                {password:inputData.password}
+                //{password:inputData.password}
             ]
-        }, (err, item) => {
+        }, (err, user) => {
             if(err) throw err;
-            rtnData.result = (item._id !== "") ? "S" : "F"
-            rtnData.user = item;
-            res.send(rtnData);            
-            conn.close();
+            
+            if(user){
+                console.log(user.password)
+                security.comparePassword(inputData.password, user.password, (result) => {
+                console.log("comparePassword....");
+                rtnData.result = result ? "S" : "F";
+                rtnData.user = user;
+               
+                res.send(rtnData);            
+                conn.close();
+
+                })
+            } else {
+                console.log("no user...")
+                rtnData.result = "F";
+
+                res.send(rtnData);            
+                conn.close();
+            }
         });
     })
 }

@@ -1,4 +1,6 @@
 var express = require('express');
+const session = require('express-session');
+const {RedisStore} = require('./lib/redis');
 var app = require('express')();
 var http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -16,6 +18,13 @@ const dbUri = "mongodb+srv://mongoman01:mongoman01@cluster0-jcbtw.mongodb.net/li
 //var User = require('./lib/user');
 //var dbo = null;
 //var database = null;
+
+app.use(session({
+  secret: 'somesecret', 
+  store: RedisStore, 
+  saveUninitialized: false, 
+  resave: false
+}));
 
 app.use('/user', userRouter);
 
