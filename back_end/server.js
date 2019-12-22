@@ -1,17 +1,39 @@
 var express = require('express');
 const session = require('express-session');
-const {RedisStore} = require('./lib/redis');
+var path = require('path');
+const {redisStore} = require('./lib/redis');
 var app = require('express')();
 var http = require('http').Server(app);
 const io = require('socket.io')(http);
 const cors = require('cors');
 var bodyParser = require('body-parser');
 const Routes = express.Router();
-
 var userRouter = require('./routes/users');
 
-app.use(cors());
+app.set('trust proxy', 1);
+app.use(cors({
+  credentials:true,
+}));
 app.use(bodyParser.json());
+
+app.use(session({
+  secret: 'secret cat', 
+  store: redisStore, 
+  saveUninitialized: false, 
+  resave: false, 
+  proxy: undefined,
+  secure:true,
+  cookie : {
+    secure: true,
+    maxAge : 1000 * 60 * 60, 
+  }, 
+  rolling: true,
+  unset: 'destroy'
+}));
+app.use('/user', userRouter);
+
+
+
 
 const dbUri = "mongodb+srv://mongoman01:mongoman01@cluster0-jcbtw.mongodb.net/little_chatie?retryWrites=true&w=majority";
 //const DBAccess = require('./lib/dao');
@@ -19,14 +41,11 @@ const dbUri = "mongodb+srv://mongoman01:mongoman01@cluster0-jcbtw.mongodb.net/li
 //var dbo = null;
 //var database = null;
 
-app.use(session({
-  secret: 'somesecret', 
-  store: RedisStore, 
-  saveUninitialized: false, 
-  resave: false
-}));
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+//app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/user', userRouter);
+
+//userRouter(app);
 
 
 //set new namespace (s)
@@ -144,8 +163,9 @@ io.on('connection', (socket) => {
   })
 });
 
+//module.exports = app;
+
 const port = 8000;
 //io.listen(port);
 http.listen(port);
-
 console.log('listening on port ', port);

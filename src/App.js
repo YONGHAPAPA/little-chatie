@@ -142,7 +142,7 @@ class App extends Component {
               <Link to="/">home</Link>&nbsp;
               <Link to="/dashboard">dashboard</Link>&nbsp;
               <Link to="/signin">sign in</Link>&nbsp;
-              <Link to="/signup">sign up</Link>
+              <Link to="/signup">sign up</Link>&nbsp;
               
               {/*
                 <span onClick={this.toggleModal.bind(this)}>Login</span>

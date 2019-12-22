@@ -17,7 +17,8 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
-    "mongodb": "^3.3.5",
+    "ioredis": "^4.14.1",
+    "mongodb": "^3.4.0",
     "redis": "^2.8.0",
     "soket.io": "0.0.1-security"
   }

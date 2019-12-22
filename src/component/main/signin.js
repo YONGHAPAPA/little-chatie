@@ -10,7 +10,7 @@ export default class Signin extends Component {
         super(props);
         this.state = {
             isLogin : false, 
-            username : '', 
+            name : '', 
             email : '', 
             password : '',
         }
@@ -18,7 +18,7 @@ export default class Signin extends Component {
 
     onChangeUserName(e){
         this.setState({
-            username : e.target.value
+            name : e.target.value
         });
     }
 
@@ -34,12 +34,33 @@ export default class Signin extends Component {
         });
     }
 
+    onClickCheckSession = () => {
+        const url = "http://localhost:8000/user/login/checkSession";
+
+        console.log(url);
+        
+        axios.get(url).then(res => {
+            console.log(res.data.users)
+        });
+    }
+
+    onClickLogout = () => {
+        const url = "http://localhost:8000/user/logout";
+
+        axios.get(url, ).then(res => {
+            console.log(res.data.users)
+        });
+    }
+
     onClickLogin = () => {
+
+        console.log("onClickLogin");
+
 
         const post_url = "http://localhost:8000/user/login";
 
         let reqData = {
-            username : this.state.username, 
+            name : this.state.name, 
             email : this.state.email, 
             password : this.state.password
         }
@@ -80,6 +101,12 @@ export default class Signin extends Component {
                                 <tr>
                                     <td>
                                         <button onClick={this.onClickLogin}>Login</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <button onClick={this.onClickCheckSession}>check session</button>
+                                        <button onClick={this.onClickLogout}>log out</button>
                                     </td>
                                 </tr>
                             </tfoot>

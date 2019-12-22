@@ -11,7 +11,7 @@ export default class Siginup extends Component {
 
         this.state ={
             isLogin : false,
-            username : '', 
+            name : '', 
             email : '',
             password : ''
         }
@@ -20,7 +20,7 @@ export default class Siginup extends Component {
     
     onClickRegister = () => {
         let reqData = {
-            username : this.state.username, 
+            name : this.state.name, 
             email : this.state.email,
             password : this.state.password
         }
@@ -36,9 +36,9 @@ export default class Siginup extends Component {
         //this.props.doRegister(data);
     }
 
-    onChangeUserName(e){
+    onChangeName(e){
         this.setState({
-            username : e.target.value,
+            name : e.target.value,
         });
     }
 
@@ -65,7 +65,7 @@ export default class Siginup extends Component {
                         <table className='login_table'>
                             <tbody>
                                 <tr>
-                                    <td><label>username&nbsp;</label><input type='text' onChange={this.onChangeUserName.bind(this)}/></td>
+                                    <td><label>name&nbsp;</label><input type='text' onChange={this.onChangeName.bind(this)}/></td>
                                 </tr>
                                 <tr>
                                     <td><label>email&nbsp;</label><input type='text' onChange={this.onChangeEmail.bind(this)}/></td>
