@@ -36,8 +36,6 @@ export default class Signin extends Component {
 
     onClickCheckSession = () => {
         const url = "http://localhost:8000/user/login/checkSession";
-
-        console.log(url);
         
         axios.get(url).then(res => {
             console.log(res.data.users)
@@ -47,15 +45,12 @@ export default class Signin extends Component {
     onClickLogout = () => {
         const url = "http://localhost:8000/user/logout";
 
-        axios.get(url, ).then(res => {
+        axios.get(url).then(res => {
             console.log(res.data.users)
         });
     }
 
     onClickLogin = () => {
-
-        console.log("onClickLogin");
-
 
         const post_url = "http://localhost:8000/user/login";
 
@@ -76,6 +71,27 @@ export default class Signin extends Component {
                 alert("login fail.");
             }
         }).catch(err => {console.log(err)})
+    }
+
+    onClick_foo = () => {
+        console.log("onClick_foo");
+        const url = "http://localhost:8000/foo";
+
+        /*
+        axios.get(url).then(res => {
+            console.log(res.data.users)
+        });
+        */
+       
+    }
+
+    onClick_bar = () => {
+        console.log("onClick_bar");
+        const url = "http://localhost:8000/bar";
+
+        axios.get(url).then(res => {
+            console.log(res.data.users)
+        });
     }
     
     render(){
@@ -107,6 +123,9 @@ export default class Signin extends Component {
                                     <td>
                                         <button onClick={this.onClickCheckSession}>check session</button>
                                         <button onClick={this.onClickLogout}>log out</button>
+
+                                        <button onClick={this.onClick_foo}>foo</button>
+                                        <button onClick={this.onClick_bar}>bar</button>
                                     </td>
                                 </tr>
                             </tfoot>

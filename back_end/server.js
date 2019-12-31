@@ -9,8 +9,17 @@ const cors = require('cors');
 var bodyParser = require('body-parser');
 const Routes = express.Router();
 var userRouter = require('./routes/users');
+var parseurl = require('parseurl');
 
-app.set('trust proxy', 1);
+
+app.all('/*', function(req, res, next){
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+})
+
+
+//app.set('trust proxy', 1);
 app.use(cors({
   credentials:true,
 }));
@@ -18,19 +27,43 @@ app.use(bodyParser.json());
 
 app.use(session({
   secret: 'secret cat', 
-  store: redisStore, 
+  //store: redisStore, 
   saveUninitialized: false, 
   resave: false, 
-  proxy: undefined,
-  secure:true,
+  //proxy: undefined,
+  //secure:true,
+  /*
   cookie : {
     secure: true,
     maxAge : 1000 * 60 * 60, 
   }, 
-  rolling: true,
-  unset: 'destroy'
+  */
+  //rolling: true,
+  //unset: 'keep'
 }));
+
+app.use(function(req, res, next){
+  if(!req.session.views){
+    console.log("init session....");
+    req.session.views = {};
+  }
+
+  var pathname = parseurl(req).pathname;
+  req.session.views[pathname] = (req.session.views[pathname]||0) + 1;
+  next();
+})
+
+app.get('/foo', function(req, res, next){
+  console.log('you viewed foo page ' + req.session.views['/foo'] + ' times');
+})
+
+app.get('/bar', function(req,res,next){
+  console.log('you viewed bar page ' + req.session.views['/bar'] + ' times');
+})
+
 app.use('/user', userRouter);
+
+
 
 
 

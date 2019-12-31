@@ -104,23 +104,25 @@ exports.login = function(req, res){
 
                 console.log('*** compare password ***')
                 security.comparePassword(inputData.password, user.password, (result) => {
-                
-                rtnData.result = result ? "F" : "F";
-                rtnData.user = user;
 
-                //create user session 
-                console.log('*** create session ***');
-                req.session.user = {name:user.name, email:user.email};
-                req.session.userid = 1;
-                console.log(req.session.user);
-                console.log(req.session.userid);
-                console.log(req.session);
-                console.log(req.sessionID);
-                req.session.save();
+                    let session = req.session;
+                    rtnData.result = result ? "S" : "F";
+                    rtnData.user = user;
 
-                console.log('*** return to login ***')
-                res.send(rtnData);            
-                conn.close();
+                    //create user session 
+                    console.log('*** create session ***');
+                    session.username = user.name;
+                    session.usermail = user.email;
+                    
+                    console.log(session.username);
+                    console.log(session.usermail);
+                    console.log(session);
+                    //console.log(sessionID);
+                    //ession.save();
+
+                    console.log('*** return to login ***')
+                    res.send(rtnData);            
+                    conn.close();
                 })
             } else {
                 console.log("*** user not exists ***");
@@ -135,11 +137,10 @@ exports.login = function(req, res){
 
 exports.checkSession = (req, res) => {
 
+    let session = req.session;
+
     console.log('*** current session ***')
-    console.log(req.sessionID);
-    console.log(req.session.userid);
-    console.log(req.session);
-    console.log(req.session.cookie.expires);
+    console.log(session);
 
     /*
     const sessions = await getAllActiveSessions();
@@ -154,7 +155,7 @@ exports.checkSession = (req, res) => {
 
     //res.session.users = users;
     //res.send(users)
-    res.send('');
+    res.send('Check Current Session..');
 }
 
 
