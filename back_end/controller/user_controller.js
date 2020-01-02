@@ -171,3 +171,32 @@ exports.logout = (req, res) => {
     //req.session.destroy();
     //res.clearCookie('')
 }
+
+
+exports.foo = (req, res) => {
+    console.log("receive foo....");
+
+    //console.log("req data : " + req.body.name + " / " + req.body.email);
+    console.log("session : " + req.session.name);
+    if(req.session.name != undefined){
+        req.session.name += "_";
+    } else {
+        req.session.name = req.body.name;
+    }
+
+    req.session.save(()=>{
+        res.send({result:req.session.name});
+    });
+}
+
+exports.bar = (req, res) => {
+    console.log("receive bar....");
+    console.log("session : " + req.session.name);
+
+    //req.session.name = req.body.name;
+
+    req.session.save(()=>{
+        res.send({result:req.session.name});
+    });
+
+}

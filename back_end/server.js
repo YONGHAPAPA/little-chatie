@@ -11,16 +11,24 @@ const Routes = express.Router();
 var userRouter = require('./routes/users');
 var parseurl = require('parseurl');
 
+//Request 출처에 대한 허용 domain origin 설정
+const origins = [
+  'http://localhost:3000'
+];
 
+
+/*
 app.all('/*', function(req, res, next){
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   next();
 })
+*/
 
 
 //app.set('trust proxy', 1);
 app.use(cors({
+  origin:origins, 
   credentials:true,
 }));
 app.use(bodyParser.json());
@@ -53,13 +61,23 @@ app.use(function(req, res, next){
   next();
 })
 
-app.get('/foo', function(req, res, next){
-  console.log('you viewed foo page ' + req.session.views['/foo'] + ' times');
-})
 
-app.get('/bar', function(req,res,next){
-  console.log('you viewed bar page ' + req.session.views['/bar'] + ' times');
+/*
+app.get('/foo', function(req, res, next){
+  req.session.save(()=>{
+    console.log('you viewed foo page ' + req.session.views['/foo'] + ' times');
+  })
 })
+*/
+
+
+/*
+app.get('/bar', function(req,res,next){
+  req.session.save(()=>{
+    console.log('you viewed bar page ' + req.session.views['/bar'] + ' times');
+  });
+})
+*/
 
 app.use('/user', userRouter);
 

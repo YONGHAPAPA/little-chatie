@@ -75,23 +75,63 @@ export default class Signin extends Component {
 
     onClick_foo = () => {
         console.log("onClick_foo");
-        const url = "http://localhost:8000/foo";
+        const url = "http://localhost:8000/user/foo";
+
+        
+        axios.post(url, {name:'test', email:'test@gmail.com'}, {withCredentials:true}).then(res => {
+            console.log(res)
+        });
+        
 
         /*
-        axios.get(url).then(res => {
-            console.log(res.data.users)
-        });
+        const postdata = {
+            method:"POST", 
+            headers:{
+                'Accept':'application/json', 
+                'Content-Type':'application/json', 
+                'Cache':'no-cache'
+            }, 
+            //credentials 옵션을 설정함으로서 다른 URL 간의 쿠키, 세션정보를 공유할수 있도록 처리(include: Always send user credentials (cookies, basic http auth, etc..), even for cross-origin calls. )
+            credentials:'include',
+            body:JSON.stringify({name:'test', email:'test@gmail.com'})
+        }
+
+        fetch(url, postdata).then((res) => res.json()).then((resJson) => {
+            console.log(resJson);
+        }).catch(err => {
+            console.log(err);
+        })
         */
-       
     }
 
     onClick_bar = () => {
         console.log("onClick_bar");
-        const url = "http://localhost:8000/bar";
+        const url = "http://localhost:8000/user/bar";
 
-        axios.get(url).then(res => {
+        
+        axios.post(url, {}, {withCredentials:true}).then(res => {
             console.log(res.data.users)
         });
+        
+
+        /*
+        const postdata = {
+            method:"POST", 
+            headers:{
+                'Accept':'application/json', 
+                'Content-Type':'application/json', 
+                'Cache':'no-cache'
+            }, 
+            credentials:'include', 
+            //body:JSON.stringify({name:'test', email:'test@gmail.com'})
+        }
+
+       fetch(url, postdata).then((res) => res.json()).then((resJson) => {
+            console.log(resJson);
+        }).catch(err => {
+            console.log(err);
+        })
+        */
     }
     
     render(){
