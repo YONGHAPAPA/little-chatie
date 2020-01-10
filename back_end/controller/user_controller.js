@@ -118,7 +118,7 @@ exports.login = function(req, res){
                     console.log(session.usermail);
                     console.log(session);
                     //console.log(sessionID);
-                    //ession.save();
+                    session.save();
 
                     console.log('*** return to login ***')
                     res.send(rtnData);            

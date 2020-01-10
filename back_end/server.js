@@ -4,7 +4,7 @@ var path = require('path');
 const {redisStore} = require('./lib/redis');
 var app = require('express')();
 var http = require('http').Server(app);
-const io = require('socket.io')(http);
+const io = require('socket.io')(http, {cookie:false}); //IO session 쿠키 미생성 옵션 {cookie:false} 추가
 const cors = require('cors');
 var bodyParser = require('body-parser');
 const Routes = express.Router();
@@ -36,16 +36,16 @@ app.use(bodyParser.json());
 app.use(session({
   secret: 'secret cat', 
   //store: redisStore, 
-  saveUninitialized: false, 
+  saveUninitialized: true, 
   resave: false, 
   //proxy: undefined,
   //secure:true,
-  /*
+  
   cookie : {
     secure: true,
     maxAge : 1000 * 60 * 60, 
   }, 
-  */
+  
   //rolling: true,
   //unset: 'keep'
 }));
