@@ -2,7 +2,9 @@ const security = require('../lib/security');
 const {getAllActiveSessions} = require('../lib/redis');
 const Users = require('../lib/userService');
 const DAO = require('../lib/dao');
-const db_uri = "mongodb+srv://mongoman01:mongoman01@cluster0-jcbtw.mongodb.net/little_chatie?retryWrites=true&w=majority";
+//const db_uri = "mongodb+srv://mongoman01:mongoman01@cluster0-jcbtw.mongodb.net/little_chatie?retryWrites=true&w=majority";
+//const db_uri = process.env.DB_URL;
+
 let db_conn = null;
 
 
@@ -10,9 +12,6 @@ exports.register = (req, res) => {
 
     //console.log('*** register ***')
     //console.log(req.session);
-
-    
-
     const newUser = {
         name : '', 
         email : '', 
@@ -25,7 +24,6 @@ exports.register = (req, res) => {
         result : '', 
         user : {}
     }
-
 
     var inputStr = JSON.stringify(req.body);
     JSON.parse(inputStr, (key, value) => {
@@ -41,7 +39,6 @@ exports.register = (req, res) => {
         }
     })
 
-    
     security.encryptPassword(newUser.password, 10, (hash) => {
         newUser.password = hash;
 
@@ -67,9 +64,6 @@ exports.register = (req, res) => {
 }
 
 exports.login = function(req, res){
-
-    console.log("*** login ***");
-
     const inputData = {
         name : '', 
         email : '', 
@@ -80,6 +74,8 @@ exports.login = function(req, res){
         result : '', 
         user : {}
     }
+    
+    console.log(process.env.SUCCESS_FLG);
 
     var inputStr = JSON.stringify(req.body);
     JSON.parse(inputStr, (key, value) => {
@@ -89,7 +85,7 @@ exports.login = function(req, res){
     })
 
     const dao = new DAO();
-    dao.openConnection(db_uri).then(conn => {
+    dao.openConnection(process.env.DB_URL).then(conn => {
         let db = conn.db();
 
         db.collection("users").findOne({
@@ -106,7 +102,7 @@ exports.login = function(req, res){
                 security.comparePassword(inputData.password, user.password, (result) => {
 
                     let session = req.session;
-                    rtnData.result = result ? "S" : "F";
+                    rtnData.result = result ? process.env.SUCCESS_FLAG : process.env.FAIL_FLAG;
                     rtnData.user = user;
 
                     //create user session 
@@ -126,7 +122,7 @@ exports.login = function(req, res){
                 })
             } else {
                 console.log("*** user not exists ***");
-                rtnData.result = "F";
+                rtnData.result = process.env.Fail_FLAG;
                 res.send(rtnData);            
                 conn.close();
             }
@@ -137,9 +133,9 @@ exports.login = function(req, res){
 
 exports.checkSession = (req, res) => {
 
-    let session = req.session;
+    console.log('*** check session ***');
 
-    console.log('*** current session ***')
+    let session = req.session;
     console.log(session);
 
     /*
@@ -172,31 +168,3 @@ exports.logout = (req, res) => {
     //res.clearCookie('')
 }
 
-
-exports.foo = (req, res) => {
-    console.log("receive foo....");
-
-    //console.log("req data : " + req.body.name + " / " + req.body.email);
-    console.log("session : " + req.session.name);
-    if(req.session.name != undefined){
-        req.session.name += "_";
-    } else {
-        req.session.name = req.body.name;
-    }
-
-    req.session.save(()=>{
-        res.send({result:req.session.name});
-    });
-}
-
-exports.bar = (req, res) => {
-    console.log("receive bar....");
-    console.log("session : " + req.session.name);
-
-    //req.session.name = req.body.name;
-
-    req.session.save(()=>{
-        res.send({result:req.session.name});
-    });
-
-}

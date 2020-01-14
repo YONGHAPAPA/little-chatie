@@ -17,13 +17,15 @@ import Chatroom from './component/chat/chat-room';
 import PopupLogin from './component/main/popup-signin';
 import Popup from './component/comm/comm-popup';
 import Modal from './component/main/main-modal';
-import Signin from './component/main/signin';
-import Signup from './component/main/signup';
-import Dashboard from './component/main/dashboard'
-import TopMain from './component/main/top-main'
+import Signin from './component/main/main-signin';
+import Signup from './component/main/main-signup';
+import Dashboard from './component/main/main-dashboard'
+import TopMain from './component/main/main-top'
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
+
+
 
 
 class App extends Component {

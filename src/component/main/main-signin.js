@@ -2,7 +2,12 @@ import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom'
 import axios from 'axios';
 
+import CONFIG_DB from '../../config/db';
+import CONFIG_URL from '../../config/url';
+import CONFIG_BASE from '../../config/base'
+
 import '../../style/main.css';
+
 
 export default class Signin extends Component {
 
@@ -35,24 +40,18 @@ export default class Signin extends Component {
     }
 
     onClickCheckSession = () => {
-        const url = "http://localhost:8000/user/login/checkSession";
-        
-        axios.get(url).then(res => {
+        axios.get(CONFIG_URL.REST_CHECK_SESSION, {withCredentials:true}).then(res => {
             console.log(res.data.users)
         });
     }
 
     onClickLogout = () => {
-        const url = "http://localhost:8000/user/logout";
-
-        axios.get(url).then(res => {
+        axios.get(CONFIG_URL.REST_LOGOUT).then(res => {
             console.log(res.data.users)
         });
     }
 
     onClickLogin = () => {
-
-        const post_url = "http://localhost:8000/user/login";
 
         let reqData = {
             name : this.state.name, 
@@ -60,8 +59,9 @@ export default class Signin extends Component {
             password : this.state.password
         }
 
-        axios.post(post_url, reqData).then(res => {
-            let result = (res.data.result === "S") ? true : false;
+        //withCredentials 옵션을 주면 각개의 Reqeust별 Session Share 가능.(header값에 Access-Control-Allow-Credentials를 true 로 하는 옵션)
+        axios.post(CONFIG_URL.REST_LOGIN, reqData, {withCredentials:true}).then(res => {
+            let result = (res.data.result === CONFIG_BASE.SUCCESS_FLAG) ? true : false;
 
             this.setState({
                 isLogin : result,
@@ -71,17 +71,8 @@ export default class Signin extends Component {
                 alert("login fail.");
             }
         }).catch(err => {console.log(err)})
-    }
 
-    onClick_foo = () => {
-        console.log("onClick_foo");
-        const url = "http://localhost:8000/user/foo";
 
-        
-        axios.post(url, {name:'test', email:'test@gmail.com'}, {withCredentials:true}).then(res => {
-            console.log(res)
-        });
-        
 
         /*
         const postdata = {
@@ -104,35 +95,8 @@ export default class Signin extends Component {
         */
     }
 
-    onClick_bar = () => {
-        console.log("onClick_bar");
-        const url = "http://localhost:8000/user/bar";
 
-        
-        axios.post(url, {}, {withCredentials:true}).then(res => {
-            console.log(res.data.users)
-        });
-        
 
-        /*
-        const postdata = {
-            method:"POST", 
-            headers:{
-                'Accept':'application/json', 
-                'Content-Type':'application/json', 
-                'Cache':'no-cache'
-            }, 
-            credentials:'include', 
-            //body:JSON.stringify({name:'test', email:'test@gmail.com'})
-        }
-
-       fetch(url, postdata).then((res) => res.json()).then((resJson) => {
-            console.log(resJson);
-        }).catch(err => {
-            console.log(err);
-        })
-        */
-    }
     
     render(){
         return(

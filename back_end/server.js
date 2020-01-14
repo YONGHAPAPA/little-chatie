@@ -7,15 +7,19 @@ var http = require('http').Server(app);
 const io = require('socket.io')(http, {cookie:false}); //IO session 쿠키 미생성 옵션 {cookie:false} 추가
 const cors = require('cors');
 var bodyParser = require('body-parser');
-const Routes = express.Router();
-var userRouter = require('./routes/users');
+//const Routes = express.Router();
+var userRouter = require('./routes/user_router');
 var parseurl = require('parseurl');
+var CONFIG_BASE = require('../src/config/base');
+var CONFIG_URL = require('../src/config/url');
+require('dotenv').config({path:'../.env'});
+
+//const dbUri = process.env.DB_URL;
 
 //Request 출처에 대한 허용 domain origin 설정
 const origins = [
-  'http://localhost:3000'
+  CONFIG_URL.DOMAIN_ORIGIN
 ];
-
 
 /*
 app.all('/*', function(req, res, next){
@@ -25,34 +29,39 @@ app.all('/*', function(req, res, next){
 })
 */
 
-
 //app.set('trust proxy', 1);
 app.use(cors({
   origin:origins, 
   credentials:true,
 }));
+
 app.use(bodyParser.json());
 
 app.use(session({
-  secret: 'secret cat', 
+  secret: CONFIG_BASE.SESSION_SECRET_KEY, 
   //store: redisStore, 
   saveUninitialized: true, 
   resave: false, 
   //proxy: undefined,
-  //secure:true,
-  
   cookie : {
-    secure: true,
-    maxAge : 1000 * 60 * 60, 
+    //secure: true, //http 통신일경우 session cookie 가 유지되지 않음.
+    secure : CONFIG_BASE.COOKIE_SECURE,  
+    maxAge : CONFIG_BASE.COOKIE_MAX_AGE, 
   }, 
   
   //rolling: true,
   //unset: 'keep'
 }));
 
+//console.log(process.env.DB_URL);
+//console.log(dbUri);
+//process.env.PORT = 5000;
+//console.log(process.env.COLORTERM)
+//console.log(app.get('env'));
+//console.log("SUCCESS_FLAG : " +process.env.SUCCESS_FLAG)
+
 app.use(function(req, res, next){
   if(!req.session.views){
-    console.log("init session....");
     req.session.views = {};
   }
 
@@ -62,31 +71,12 @@ app.use(function(req, res, next){
 })
 
 
-/*
-app.get('/foo', function(req, res, next){
-  req.session.save(()=>{
-    console.log('you viewed foo page ' + req.session.views['/foo'] + ' times');
-  })
-})
-*/
-
-
-/*
-app.get('/bar', function(req,res,next){
-  req.session.save(()=>{
-    console.log('you viewed bar page ' + req.session.views['/bar'] + ' times');
-  });
-})
-*/
-
 app.use('/user', userRouter);
 
 
 
 
-
-
-const dbUri = "mongodb+srv://mongoman01:mongoman01@cluster0-jcbtw.mongodb.net/little_chatie?retryWrites=true&w=majority";
+//const dbUri = "mongodb+srv://mongoman01:mongoman01@cluster0-jcbtw.mongodb.net/little_chatie?retryWrites=true&w=majority";
 //const DBAccess = require('./lib/dao');
 //var User = require('./lib/user');
 //var dbo = null;
@@ -202,7 +192,6 @@ io.on('connection', (socket) => {
       });
       */
 
-
       io.sockets.in(room).emit('send:message', {type:'chatmsg', message:message});
     })
 
@@ -214,9 +203,6 @@ io.on('connection', (socket) => {
   })
 });
 
-//module.exports = app;
-
-const port = 8000;
 //io.listen(port);
-http.listen(port);
-console.log('listening on port ', port);
+http.listen(CONFIG_BASE.LISTEN_PORT)
+console.log('listening on port ', CONFIG_BASE.LISTEN_PORT);
