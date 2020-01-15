@@ -15,7 +15,7 @@ const connection = null;
 
 
 
-class DAO{
+class Dao{
 
     /*
     test(uri){
@@ -82,4 +82,4 @@ class DAO{
     }
 }
 
-module.exports = DAO;
+module.exports = Dao;

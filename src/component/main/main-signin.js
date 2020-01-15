@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom'
 import axios from 'axios';
 
-import CONFIG_DB from '../../config/db';
-import CONFIG_URL from '../../config/url';
-import CONFIG_BASE from '../../config/base'
+import PROP_DB from '../../properties/db';
+import PROP_URL from '../../properties/url';
+import PROP_BASE from '../../properties/base'
 
 import '../../style/main.css';
 
@@ -40,13 +40,13 @@ export default class Signin extends Component {
     }
 
     onClickCheckSession = () => {
-        axios.get(CONFIG_URL.REST_CHECK_SESSION, {withCredentials:true}).then(res => {
+        axios.get(PROP_URL.REST_CHECK_SESSION, {withCredentials:true}).then(res => {
             console.log(res.data.users)
         });
     }
 
     onClickLogout = () => {
-        axios.get(CONFIG_URL.REST_LOGOUT).then(res => {
+        axios.get(PROP_URL.REST_LOGOUT).then(res => {
             console.log(res.data.users)
         });
     }
@@ -60,8 +60,8 @@ export default class Signin extends Component {
         }
 
         //withCredentials 옵션을 주면 각개의 Reqeust별 Session Share 가능.(header값에 Access-Control-Allow-Credentials를 true 로 하는 옵션)
-        axios.post(CONFIG_URL.REST_LOGIN, reqData, {withCredentials:true}).then(res => {
-            let result = (res.data.result === CONFIG_BASE.SUCCESS_FLAG) ? true : false;
+        axios.post(PROP_URL.REST_LOGIN, reqData, {withCredentials:true}).then(res => {
+            let result = (res.data.result === PROP_BASE.SUCCESS_FLAG) ? true : false;
 
             this.setState({
                 isLogin : result,
@@ -127,9 +127,6 @@ export default class Signin extends Component {
                                     <td>
                                         <button onClick={this.onClickCheckSession}>check session</button>
                                         <button onClick={this.onClickLogout}>log out</button>
-
-                                        <button onClick={this.onClick_foo}>foo</button>
-                                        <button onClick={this.onClick_bar}>bar</button>
                                     </td>
                                 </tr>
                             </tfoot>

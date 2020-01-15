@@ -10,8 +10,8 @@ var bodyParser = require('body-parser');
 //const Routes = express.Router();
 var userRouter = require('./routes/user_router');
 var parseurl = require('parseurl');
-var CONFIG_BASE = require('../src/config/base');
-var CONFIG_URL = require('../src/config/url');
+var CONFIG_BASE = require('../src/properties/base');
+var CONFIG_URL = require('../src/properties/url');
 require('dotenv').config({path:'../.env'});
 
 //const dbUri = process.env.DB_URL;
