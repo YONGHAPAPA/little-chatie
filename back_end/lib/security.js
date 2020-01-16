@@ -1,6 +1,5 @@
 const bcrypt= require('bcryptjs');
 
-
 exports.encryptPassword = function(password, round, callback){
     bcrypt.genSalt(round, (err, salt) => {
         bcrypt.hash(password, salt, (err, hash) => {
